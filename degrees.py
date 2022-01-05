@@ -91,9 +91,40 @@ def shortest_path(source, target):
 
     If no possible path, returns None.
     """
+    #ToDO
+    start = Node(state=source, parent=None, action=None)
+    frontier = QueueFrontier() # BFS through queue system
+    frontier.add(start) # adds the starting node to the frontier
 
-    # TODO
-    raise NotImplementedError
+    # initialize empty explored set
+    explored = set()
+
+    # keep looping to explore
+    while True:
+        if frontier.empty():
+            raise Exception("no solution")
+        
+        # choose a node from the frontier
+        node = frontier.remove()
+
+        # add node to the explored set
+        explored.add(node.state)
+
+        # expand node - add neighbours if not already in the frontier or the explored set
+        for movie_id,person_id in neighbors_for_person(node.state):
+            if not frontier.contains_state(person_id) and person_id not in explored:
+                child = Node(state=person_id, parent=node, action=movie_id)
+
+                # if node is goal, return solution
+                if child.state == target:
+                    solution = []
+                    while child.parent is not None:
+                        solution.append((child.action, child.state))
+                        child = child.parent
+                    solution.reverse()
+                    return solution  
+                frontier.add(child)
+
 
 
 def person_id_for_name(name):
