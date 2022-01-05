@@ -1,2 +1,0 @@
-pip install submit50
-
